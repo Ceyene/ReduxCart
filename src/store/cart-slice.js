@@ -26,8 +26,8 @@ const cartSlice = createSlice({
 					title: newItem.title,
 				}); //push can be used with redux toolkit
 			} else {
-				existingItem.quantity++;
-				existingItem.totalPrice = existingItem.totalPrice + newItem.price;
+				existingItem.quantity++; //this only applies inside a reducer from redux toolkit
+				existingItem.totalPrice = existingItem.totalPrice + newItem.price; //never mutate state outside a reducer
 			}
 		},
 		removeItemFromCart(state, action) {
