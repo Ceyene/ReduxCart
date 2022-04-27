@@ -9,6 +9,9 @@ import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
 
+//handling useEffect so it will no overwrite cart information the first time it loads
+let isInitial = true;
+
 function App() {
 	const showCart = useSelector((state) => state.ui.cartIsVisible); //accessing the state inside the ui slice
 	const cart = useSelector((state) => state.cart); //accessing the state inside the cart slice
@@ -47,6 +50,13 @@ function App() {
 			);
 		};
 
+		//if it's the first time this component loads, don't send cart data
+		if (isInitial) {
+			isInitial = false; //setting it so the next time it will send cart data
+			return;
+		}
+
+		//sending cart data and error handling
 		sendCartData().catch((error) => {
 			//if it wasn't successful, send a notification
 			dispatch(
