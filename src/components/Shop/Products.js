@@ -22,6 +22,18 @@ const DUMMY_PRODUCTS = [
 		title: 'Mars Chronicles',
 		description: 'A book from R. Bradbury',
 	},
+	{
+		id: 'p4',
+		price: 5,
+		title: 'Elantris',
+		description: 'A book from B. Sanderson',
+	},
+	{
+		id: 'p5',
+		price: 7,
+		title: 'The Last Wish (The Witcher 1)',
+		description: 'A book from A. Saplowski',
+	},
 ];
 
 const Products = (props) => {
