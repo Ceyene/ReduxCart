@@ -8,6 +8,7 @@ const cartSlice = createSlice({
 		items: [],
 		totalQuantity: 0,
 		totalAmount: 0,
+		changed: false,
 	},
 	reducers: {
 		replaceCart(state, action) {
@@ -20,6 +21,7 @@ const cartSlice = createSlice({
 			const existingItem = state.items.find((item) => item.id === newItem.id);
 			state.totalQuantity++;
 			state.totalAmount += newItem.price;
+			state.changed = true;
 
 			//if the item to be added is already in the cart, just update its quantity
 			if (!existingItem) {
@@ -40,6 +42,7 @@ const cartSlice = createSlice({
 			const existingItem = state.items.find((item) => item.id === id);
 			state.totalQuantity--;
 			state.totalAmount -= existingItem.price;
+			state.changed = true;
 
 			//if the item to remove is just once in the cart, remove it, else, just update its quantity
 			if (existingItem.quantity === 1) {

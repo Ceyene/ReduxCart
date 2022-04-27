@@ -32,8 +32,11 @@ function App() {
 			isInitial = false; //setting it so the next time it will send cart data
 			return;
 		}
-		//using customized action creator (redux-toolkit)
-		dispatch(sendCartData(cart));
+		//using initial state from redux to avoid sending data the first time it loads
+		if (cart.changed) {
+			//using customized action creator (redux-toolkit)
+			dispatch(sendCartData(cart));
+		}
 	}, [cart, dispatch]); //dispatch will never change, so it will never trigger this hook
 
 	return (
