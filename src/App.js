@@ -2,7 +2,7 @@
 import { Fragment, useEffect } from 'react';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { sendCartData } from './store/cart-slice';
+import { sendCartData, fetchCartData } from './store/cart-actions';
 //components
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
@@ -18,7 +18,14 @@ function App() {
 	const dispatch = useDispatch(); //accessing dispatch method
 	const notification = useSelector((state) => state.ui.notification); //accesing the notifications state inside the ui slice
 
-	//handling side effects inside components with useEffect (Fat reducer: all logic in there)
+	//Handling side effects inside components with useEffect (Fat reducer: all logic in there)
+
+	//1st time loading -> fetching cart data from firebase to our cart component
+	useEffect(() => {
+		dispatch(fetchCartData());
+	}, [dispatch]);
+
+	//each time our cart is uploaded, sending data to firebase
 	useEffect(() => {
 		//if it's the first time this component loads, don't send cart data
 		if (isInitial) {
