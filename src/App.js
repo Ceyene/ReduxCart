@@ -2,7 +2,7 @@
 import { Fragment, useEffect } from 'react';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { uiActions } from './store/ui-slice';
+import { sendCartData } from './store/cart-slice';
 //components
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
@@ -20,53 +20,13 @@ function App() {
 
 	//handling side effects inside components with useEffect (Fat reducer: all logic in there)
 	useEffect(() => {
-		const sendCartData = async () => {
-			dispatch(
-				uiActions.showNotification({
-					status: 'pending',
-					title: 'Sending...',
-					message: 'Sending cart data',
-				})
-			);
-			const response = await fetch(
-				'https://shopping-redux-default-rtdb.firebaseio.com/cart.json',
-				{
-					method: 'PUT',
-					body: JSON.stringify(cart),
-				}
-			);
-			//handling errors before continue
-			if (!response.ok) {
-				throw new Error('Sending cart data failed');
-			}
-
-			//if it was successful, send a notification
-			dispatch(
-				uiActions.showNotification({
-					status: 'success',
-					title: 'Success!',
-					message: 'Sent cart data successfully!',
-				})
-			);
-		};
-
 		//if it's the first time this component loads, don't send cart data
 		if (isInitial) {
 			isInitial = false; //setting it so the next time it will send cart data
 			return;
 		}
-
-		//sending cart data and error handling
-		sendCartData().catch((error) => {
-			//if it wasn't successful, send a notification
-			dispatch(
-				uiActions.showNotification({
-					status: 'error',
-					title: 'Error!',
-					message: 'Sending cart data failed',
-				})
-			);
-		});
+		//using customized action creator (redux-toolkit)
+		dispatch(sendCartData(cart));
 	}, [cart, dispatch]); //dispatch will never change, so it will never trigger this hook
 
 	return (
