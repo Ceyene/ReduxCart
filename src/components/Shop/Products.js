@@ -19,7 +19,7 @@ const DUMMY_PRODUCTS = [
 	{
 		id: 'p3',
 		price: 3,
-		title: 'Lunar Chronicles',
+		title: 'Mars Chronicles',
 		description: 'A book from R. Bradbury',
 	},
 ];
