@@ -1,29 +1,78 @@
 //dependencies
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 //redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { uiActions } from './store/ui-slice';
 //components
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
+import Notification from './components/UI/Notification';
 
 function App() {
 	const showCart = useSelector((state) => state.ui.cartIsVisible); //accessing the state inside the ui slice
 	const cart = useSelector((state) => state.cart); //accessing the state inside the cart slice
+	const dispatch = useDispatch(); //accessing dispatch method
+	const notification = useSelector((state) => state.ui.notification); //accesing the notifications state inside the ui slice
 
 	//handling side effects inside components with useEffect (Fat reducer: all logic in there)
 	useEffect(() => {
-		fetch('https://shopping-redux-default-rtdb.firebaseio.com/cart.json', {
-			method: 'PUT',
-			body: JSON.stringify(cart),
+		const sendCartData = async () => {
+			dispatch(
+				uiActions.showNotification({
+					status: 'pending',
+					title: 'Sending...',
+					message: 'Sending cart data',
+				})
+			);
+			const response = await fetch(
+				'https://shopping-redux-default-rtdb.firebaseio.com/cart.json',
+				{
+					method: 'PUT',
+					body: JSON.stringify(cart),
+				}
+			);
+			//handling errors before continue
+			if (!response.ok) {
+				throw new Error('Sending cart data failed');
+			}
+
+			//if it was successful, send a notification
+			dispatch(
+				uiActions.showNotification({
+					status: 'success',
+					title: 'Success!',
+					message: 'Sent cart data successfully!',
+				})
+			);
+		};
+
+		sendCartData().catch((error) => {
+			//if it wasn't successful, send a notification
+			dispatch(
+				uiActions.showNotification({
+					status: 'error',
+					title: 'Error!',
+					message: 'Sending cart data failed',
+				})
+			);
 		});
-	}, [cart]);
+	}, [cart, dispatch]); //dispatch will never change, so it will never trigger this hook
 
 	return (
-		<Layout>
-			{showCart && <Cart />}
-			<Products />
-		</Layout>
+		<Fragment>
+			{notification && (
+				<Notification
+					status={notification.status}
+					title={notification.title}
+					message={notification.message}
+				/>
+			)}
+			<Layout>
+				{showCart && <Cart />}
+				<Products />
+			</Layout>
+		</Fragment>
 	);
 }
 
