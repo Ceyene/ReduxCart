@@ -62,7 +62,11 @@ export const sendCartData = (cart) => {
 				'https://shopping-redux-default-rtdb.firebaseio.com/cart.json',
 				{
 					method: 'PUT', //with this method, firebase will take our format of data, so we won't need to make any destructuring in order to use that same data when we fetch it from the db
-					body: JSON.stringify(cart),
+					body: JSON.stringify({
+						items: cart.items,
+						totalQuantity: cart.totalQuantity,
+						totalAmount: cart.totalAmount,
+					}),
 				}
 			);
 			//handling errors before continue (not sending a bad response to the UI without catching it as an error)
