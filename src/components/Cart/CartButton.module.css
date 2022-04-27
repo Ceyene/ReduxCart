@@ -1,21 +1,35 @@
 .button {
-  background-color: transparent;
-  border-color: #1ad1b9;
-  color: #1ad1b9;
+	background-color: transparent;
+	border-color: #1ad1b9;
+	color: #1ad1b9;
+	width: 30vw;
+	padding: 0.5rem 0.3rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .button:hover,
 .button:active {
-  color: white;
+	color: white;
 }
 
 .button span {
-  margin: 0 0.5rem;
+	margin: 0 0.5rem;
 }
 
 .badge {
-  background-color: #1ad1b9;
-  border-radius: 30px;
-  padding: 0.15rem 1.25rem;
-  color: #1d1d1d;
+	background-color: #1ad1b9;
+	border-radius: 30px;
+	padding: 0.15rem 1.25rem;
+	color: #1d1d1d;
+}
+
+@media (min-width: 540px) {
+	.button {
+		flex-direction: row;
+		width: auto;
+		padding: 0.7rem;
+	}
 }
